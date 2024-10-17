@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Call</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+            text-align: center;
+        }
+        #callSound {
+            display: none; /* Ocultar el elemento de audio */
+        }
+    </style>
+</head>
+<body>
+    <div id="callScreen">
+        <div id="callIcon">📞</div>
+        <div id="callerName">Nombre del Contacto</div>
+        <div id="timer">00:00</div>
+        <button id="endCallButton">🛑</button>
+    </div>
+    <audio id="callSound" src="sound.mp3" preload="auto"></audio>
+
+    <script>
+        const timerDisplay = document.getElementById("timer");
+        const endCallButton = document.getElementById("endCallButton");
+        const callSound = document.getElementById("callSound");
+        let callTimer;
+        let seconds = 0;
+
+        // Función para iniciar la llamada
+        function startCall() {
+            callSound.play(); // Reproducir el sonido de llamada
+            seconds = 0; // Reiniciar el contador
+            updateTimer(); // Actualizar el temporizador
+            callTimer = setInterval(updateTimer, 1000); // Actualizar cada segundo
+        }
+
+        // Función para actualizar el temporizador
+        function updateTimer() {
+            seconds++;
+            timerDisplay.textContent = formatTime(seconds);
+        }
+
+        // Función para formatear el tiempo
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // Finalizar la llamada
+        endCallButton.addEventListener("click", function() {
+            clearInterval(callTimer); // Detener el temporizador
+            callSound.pause(); // Detener el sonido
+            callSound.currentTime = 0; // Reiniciar el sonido
+            window.close(); // Cerrar la ventana (opcional)
+        });
+
+        // Iniciar la llamada después de un tiempo específico (ejemplo: 5 segundos)
+        setTimeout(startCall, 5000); // Cambia 5000 a la duración deseada (en milisegundos)
+    </script>
+</body>
+</html>
+    
